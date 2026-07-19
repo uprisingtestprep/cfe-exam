@@ -1,0 +1,213 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0, viewport-fit=cover">
+  <title>CFE Exam Prep: 500 Knowledge-Check Questions and Answers</title>
+  <style>
+    :root {
+      --blue:   #1B3A6B;
+      --teal:   #0A7E8C;
+      --ltblue: #E8F4F8;
+      --white:  #FFFFFF;
+      --text:   #1A1A1A;
+      --muted:  #666;
+      --green:  #1A6B3A;
+      --radius: 12px;
+    }
+    * { box-sizing: border-box; margin: 0; padding: 0; }
+    html, body { height: 100%; }
+    body {
+      font-family: 'Segoe UI', system-ui, sans-serif;
+      background: linear-gradient(135deg, var(--blue) 0%, var(--teal) 100%);
+      min-height: 100dvh;
+      color: var(--text);
+      padding: calc(1.25rem + env(safe-area-inset-top, 0px)) 1rem calc(1.5rem + env(safe-area-inset-bottom, 0px));
+    }
+    header { text-align: center; color: #fff; margin-bottom: 1rem; }
+    header .brand { font-size: 0.75rem; font-weight: 700; letter-spacing: 0.1em; opacity: 0.8; text-transform: uppercase; }
+    header h1 { font-size: 1.3rem; font-weight: 800; margin-top: 0.2rem; }
+    header .subtitle { font-size: 0.8rem; opacity: 0.75; margin-top: 0.15rem; }
+    #toolbar {
+      max-width: 800px; margin: 0 auto 1rem; display: flex; gap: 0.6rem; flex-wrap: wrap;
+      align-items: center; justify-content: center;
+    }
+    #comp-select, #search-box {
+      background: rgba(255,255,255,0.15); color: #fff;
+      border: 2px solid rgba(255,255,255,0.4); border-radius: 50px;
+      padding: 0.5rem 1rem; font-size: 0.85rem; font-weight: 600;
+    }
+    #comp-select option { color: var(--text); }
+    #search-box { flex: 1; min-width: 180px; }
+    #search-box::placeholder { color: rgba(255,255,255,0.7); }
+    #counter { text-align: center; color: rgba(255,255,255,0.85); font-size: 0.85rem; margin-bottom: 1rem; }
+    #list { max-width: 800px; margin: 0 auto; display: flex; flex-direction: column; gap: 0.85rem; }
+    .q-card {
+      background: var(--white); border-radius: var(--radius);
+      box-shadow: 0 8px 28px rgba(0,0,0,0.18); overflow: hidden;
+    }
+    .q-head {
+      padding: 1rem 1.2rem; cursor: pointer; display: flex; gap: 0.75rem; align-items: flex-start;
+    }
+    .q-num { color: var(--teal); font-weight: 800; flex-shrink: 0; }
+    .q-body { flex: 1; }
+    .q-badge {
+      display: inline-block; font-size: 0.65rem; font-weight: 700; text-transform: uppercase;
+      letter-spacing: 0.06em; background: var(--ltblue); color: var(--teal);
+      padding: 0.15rem 0.55rem; border-radius: 20px; margin-bottom: 0.4rem;
+    }
+    .q-text { font-weight: 600; color: var(--blue); line-height: 1.5; }
+    .options { margin-top: 0.65rem; display: flex; flex-direction: column; gap: 0.35rem; }
+    .opt { padding: 0.4rem 0.65rem; border-radius: 8px; background: #f4f6f9; font-size: 0.9rem; }
+    .opt .opt-letter { font-weight: 700; margin-right: 0.4rem; }
+    .opt.correct { background: #e7f6ec; border: 1.5px solid var(--green); }
+    .opt.correct .opt-letter { color: var(--green); }
+    .explanation {
+      display: none; margin-top: 0.75rem; padding-top: 0.75rem;
+      border-top: 1px solid #e2e2e2; font-size: 0.9rem; line-height: 1.6; color: var(--text);
+    }
+    .explanation .label { font-weight: 700; color: var(--green); text-transform: uppercase; font-size: 0.7rem; letter-spacing: 0.05em; display: block; margin-bottom: 0.3rem; }
+    .q-card.open .options { display: flex; }
+    .q-card.open .explanation { display: block; }
+    .options { display: none; }
+    .q-card.open .q-head { border-bottom: 1px solid #eee; }
+    .toggle-hint { flex-shrink: 0; color: var(--muted); font-size: 0.8rem; align-self: center; }
+    #loading, #empty { color: rgba(255,255,255,0.85); text-align: center; padding: 3rem 1rem; }
+    #load-more-row { text-align: center; margin-top: 1.25rem; }
+    .btn {
+      padding: 0.6rem 1.4rem; border-radius: 50px; border: 2px solid rgba(255,255,255,0.5);
+      background: rgba(255,255,255,0.15); color: #fff; font-weight: 700; font-size: 0.85rem;
+      cursor: pointer; transition: all 0.2s;
+    }
+    .btn:hover { background: rgba(255,255,255,0.3); }
+    @media (max-width: 380px) {
+      header h1 { font-size: 1.1rem; }
+      .q-text { font-size: 0.95rem; }
+    }
+  </style>
+</head>
+<body>
+<header>
+  <div class="brand">Uprising Test Prep</div>
+  <h1>CFE (CPA Common Final Examination) Prep</h1>
+  <div class="subtitle">500 Knowledge-Check Questions &amp; Answers</div>
+</header>
+<div id="toolbar">
+  <select id="comp-select" onchange="applyFilters()">
+    <option value="all">All Competencies (500)</option>
+  </select>
+  <input id="search-box" type="text" placeholder="Search questions..." oninput="applyFilters()">
+</div>
+<div id="counter"></div>
+<div id="loading">Loading questions...</div>
+<div id="empty" style="display:none">No questions match your search.</div>
+<div id="list"></div>
+<div id="load-more-row" style="display:none">
+  <button class="btn" onclick="loadMore()">Show More</button>
+</div>
+<script>
+const COMP_LABELS = {
+  financial_reporting: "Financial Reporting",
+  management_accounting: "Management Accounting",
+  taxation: "Taxation",
+  audit_assurance: "Audit and Assurance",
+  finance: "Finance",
+  strategy_governance: "Strategy and Governance",
+};
+const COMP_ORDER = ["financial_reporting","management_accounting","taxation","audit_assurance","finance","strategy_governance"];
+const PAGE_SIZE = 40;
+
+let allQuestions = [];
+let filtered = [];
+let shown = 0;
+
+function compLabel(key) {
+  return COMP_LABELS[key] || String(key).replace(/_/g, ' ').replace(/\b\w/g, c => c.toUpperCase());
+}
+
+async function init() {
+  try {
+    const res = await fetch('questions.json');
+    if (!res.ok) throw new Error('Network error');
+    allQuestions = await res.json();
+    buildCompSelect();
+    document.getElementById('loading').style.display = 'none';
+    applyFilters();
+  } catch (e) {
+    document.getElementById('loading').textContent = 'Error loading questions. Please try refreshing.';
+  }
+}
+
+function buildCompSelect() {
+  const sel = document.getElementById('comp-select');
+  sel.innerHTML = '';
+  const allOpt = document.createElement('option');
+  allOpt.value = 'all';
+  allOpt.textContent = `All Competencies (${allQuestions.length})`;
+  sel.appendChild(allOpt);
+  COMP_ORDER.forEach(key => {
+    const count = allQuestions.filter(q => q.competency === key).length;
+    if (count === 0) return;
+    const opt = document.createElement('option');
+    opt.value = key;
+    opt.textContent = `${compLabel(key)} (${count})`;
+    sel.appendChild(opt);
+  });
+}
+
+function applyFilters() {
+  const comp = document.getElementById('comp-select').value;
+  const term = document.getElementById('search-box').value.trim().toLowerCase();
+  filtered = allQuestions.filter(q => {
+    if (comp !== 'all' && q.competency !== comp) return false;
+    if (term && !q.question.toLowerCase().includes(term)) return false;
+    return true;
+  });
+  shown = 0;
+  document.getElementById('list').innerHTML = '';
+  document.getElementById('empty').style.display = filtered.length === 0 ? 'block' : 'none';
+  document.getElementById('counter').textContent = `${filtered.length} question${filtered.length === 1 ? '' : 's'}`;
+  loadMore();
+}
+
+function loadMore() {
+  const list = document.getElementById('list');
+  const next = filtered.slice(shown, shown + PAGE_SIZE);
+  next.forEach(q => list.appendChild(renderCard(q)));
+  shown += next.length;
+  document.getElementById('load-more-row').style.display = shown < filtered.length ? 'block' : 'none';
+}
+
+function renderCard(q) {
+  const card = document.createElement('div');
+  card.className = 'q-card';
+  const letters = ['A', 'B', 'C', 'D'];
+  const optionsHtml = letters
+    .filter(l => q.options && q.options[l])
+    .map(l => `<div class="opt ${l === q.correct ? 'correct' : ''}"><span class="opt-letter">${l}.</span>${escapeHtml(q.options[l])}</div>`)
+    .join('');
+  card.innerHTML = `
+    <div class="q-head" onclick="this.closest('.q-card').classList.toggle('open')">
+      <div class="q-num">${q.id}.</div>
+      <div class="q-body">
+        <span class="q-badge">${compLabel(q.competency)}</span>
+        <div class="q-text">${escapeHtml(q.question)}</div>
+        <div class="options">${optionsHtml}</div>
+        <div class="explanation"><span class="label">Explanation</span>${escapeHtml(q.explanation)}</div>
+      </div>
+      <div class="toggle-hint">Tap</div>
+    </div>
+  `;
+  return card;
+}
+
+function escapeHtml(s) {
+  const div = document.createElement('div');
+  div.textContent = s || '';
+  return div.innerHTML;
+}
+
+init();
+</script>
+</body>
+</html>

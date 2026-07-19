@@ -1,0 +1,146 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0, viewport-fit=cover">
+<title>CFE Case Practice Timer</title>
+<link rel="stylesheet" href="style.css">
+</head>
+<body>
+
+<div id="gate-screen" class="screen">
+  <div class="gate-box">
+    <div class="brand">Uprising Test Prep</div>
+    <h1>CPA CFE Case Practice</h1>
+    <p class="muted">Enter your access code to begin.</p>
+    <input id="access-code-input" type="text" placeholder="Access Code" autocomplete="off">
+    <button id="gate-submit" class="btn btn-primary">Enter</button>
+    <p id="gate-error" class="error"></p>
+  </div>
+</div>
+
+<div id="list-screen" class="screen" style="display:none">
+  <header class="app-header">
+    <div>
+      <div class="brand">Uprising Test Prep</div>
+      <h1>100 Practice Cases</h1>
+    </div>
+    <div class="header-actions">
+      <a href="flashcards/index.html" target="_blank" class="btn btn-ghost">Flashcards</a>
+    </div>
+  </header>
+
+  <div class="filters">
+    <select id="filter-day">
+      <option value="">All Days</option>
+      <option value="1">Day 1 (240 min)</option>
+      <option value="2">Day 2 (300 min)</option>
+      <option value="3">Day 3 (80 min)</option>
+    </select>
+    <select id="filter-elective">
+      <option value="">All Electives</option>
+    </select>
+    <span id="case-count" class="muted"></span>
+  </div>
+
+  <div id="case-list" class="case-list"></div>
+</div>
+
+<div id="case-screen" class="screen" style="display:none">
+  <header class="app-header">
+    <button id="back-to-list" class="btn btn-ghost">&#8592; All Cases</button>
+    <div id="case-title-header"></div>
+  </header>
+
+  <div class="case-body">
+    <div class="meta-row">
+      <span id="case-day-badge" class="badge"></span>
+      <span id="case-elective-badge" class="badge badge-alt" style="display:none"></span>
+      <span id="case-time-badge" class="badge badge-ghost"></span>
+    </div>
+
+    <section class="panel">
+      <h2>Competencies Tested</h2>
+      <div id="case-competencies" class="tag-row"></div>
+      <h2 class="second-h2">Enabling Focus</h2>
+      <div id="case-enabling" class="tag-row"></div>
+    </section>
+
+    <section class="panel">
+      <h2>Case Background <span class="muted">(Reading &amp; Planning)</span></h2>
+      <p id="case-background" class="preline"></p>
+    </section>
+
+    <section class="panel">
+      <h2>Exhibits</h2>
+      <div id="case-exhibits"></div>
+    </section>
+
+    <section class="panel">
+      <h2>Requirements</h2>
+      <ol id="case-requirements"></ol>
+    </section>
+
+    <div class="action-row">
+      <button id="print-case-btn" class="btn btn-ghost">Print Case (No Answer)</button>
+    </div>
+
+    <section class="panel timer-panel">
+      <h2>Case Timer</h2>
+      <p class="muted timer-howto">
+        Read the background, exhibits, and requirements above, then click <strong>Start Timer</strong>
+        to begin your allotted writing time. Write your response on paper or in a separate document,
+        just like the real exam, where you get no feedback until time is up. Click
+        <strong>Pause</strong> to stop the clock. The model answer stays locked until your full time
+        is used, matching the real exam.
+      </p>
+      <div id="timer-display">0:00</div>
+      <div id="timer-label" class="muted">Not Started</div>
+      <div class="timer-controls">
+        <button id="timer-start" class="btn btn-primary">Start Timer</button>
+        <button id="timer-pause" class="btn btn-ghost" disabled>Pause</button>
+        <button id="timer-reset" class="btn btn-ghost">Reset</button>
+      </div>
+    </section>
+
+    <section class="panel" id="reveal-panel">
+      <button id="reveal-btn" class="btn btn-primary btn-block" disabled>Reveal Model Answer &amp; Marking Guide (locked until time is up)</button>
+    </section>
+
+    <section id="answer-section" class="panel answer-section" style="display:none">
+      <h2>Model Response &mdash; The CPA Way</h2>
+
+      <div class="cpaway-box">
+        <div class="cpaway-label">Step 1: Understand the Issue</div>
+        <p id="model-understand" class="preline"></p>
+      </div>
+      <div class="cpaway-box">
+        <div class="cpaway-label">Step 2: Analyze the Case</div>
+        <p id="model-analyze" class="preline"></p>
+      </div>
+      <div class="cpaway-box">
+        <div class="cpaway-label">Step 3: Recommend</div>
+        <p id="model-recommend" class="preline"></p>
+      </div>
+      <div class="cpaway-box">
+        <div class="cpaway-label">Step 4: Conclude</div>
+        <p id="model-conclude" class="preline"></p>
+      </div>
+
+      <h2 class="second-h2">Marking Guide &amp; Self-Assessment</h2>
+      <p class="muted">For each criterion, rate how well your written response addressed it.</p>
+      <div id="marking-guide-container"></div>
+
+      <h2 class="second-h2">Rating Guidance</h2>
+      <p id="rating-guidance-text" class="preline"></p>
+
+      <button id="mark-practiced-btn" class="btn btn-primary btn-block">Mark as Practiced</button>
+    </section>
+  </div>
+</div>
+
+<div id="print-area" style="display:none"></div>
+
+<script src="app.js"></script>
+</body>
+</html>
